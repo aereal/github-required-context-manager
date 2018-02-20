@@ -21,21 +21,34 @@ type CLIOpts struct {
 }
 
 func dispatchCmd(opts *CLIOpts) (Cmd, error) {
-	if opts.list && opts.add {
-	} else if opts.list {
+	specified := []string{}
+	if opts.list {
+		specified = append(specified, "list")
+	}
+	if opts.add {
+		specified = append(specified, "add")
+	}
+
+	if len(specified) != 1 {
+		return nil, fmt.Errorf("Either -list or -add given")
+	}
+
+	switch specified[0] {
+	case "list":
 		cmd, err := newListCmd(opts)
 		if err != nil {
 			return nil, err
 		}
 		return cmd, nil
-	} else if opts.add {
+	case "add":
 		cmd, err := newAddCmd(opts)
 		if err != nil {
 			return nil, err
 		}
 		return cmd, nil
+	default:
+		return nil, fmt.Errorf("Either -list or -add given")
 	}
-	return nil, fmt.Errorf("Either -list or -add given")
 }
 
 func parseArgs(argv []string) (*CLIOpts, error) {
