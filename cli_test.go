@@ -28,7 +28,7 @@ func TestParseArgs(t *testing.T) {
 		&testCaseParseArgs{
 			argv: strings.Split("github-required-context-manager", " "),
 			opts: nil,
-			err:  fmt.Errorf("owner cannnot be empty"),
+			err:  fmt.Errorf("owner cannot be empty"),
 		},
 		&testCaseParseArgs{
 			argv: strings.Split("github-required-context-manager -owner aereal", " "),

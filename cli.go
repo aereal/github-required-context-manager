@@ -81,7 +81,7 @@ func parseArgs(argv []string, out io.Writer) (*CLIOpts, error) {
 	}
 
 	if args.owner == "" {
-		return nil, fmt.Errorf("owner cannnot be empty")
+		return nil, fmt.Errorf("owner cannot be empty")
 	}
 
 	if args.repo == "" {
