@@ -7,4 +7,4 @@ go get -u github.com/tcnksm/ghr
 
 latest_tag="$(git describe --abbrev=0 --tags)"
 goxz -d dist/$latest_tag -z -os darwin,linux -arch amd64,386
-ghr -u aereal -r go-http-magi $latest_tag dist/$latest_tag
+ghr -u aereal -r github-required-context-manager $latest_tag dist/$latest_tag
