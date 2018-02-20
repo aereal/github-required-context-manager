@@ -1,0 +1,11 @@
+---
+
+sudo: false
+language: go
+install:
+  - go get github.com/golang/dep/cmd/dep
+  - dep ensure -v
+script:
+  - go test -v --cover --short ./...
+after_success:
+  - if [[ $TRAVIS_TAG =~ ^v[0-9].*$ ]]; then bash ./scripts/release; fi
