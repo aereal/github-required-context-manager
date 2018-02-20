@@ -10,23 +10,39 @@ type Cmd interface {
 }
 
 type AddCmd struct {
-	opts        *CLIOpts
-	contextName string
+	opts *CLIOpts
 }
 
 func newAddCmd(opts *CLIOpts) (*AddCmd, error) {
-	ctxName := opts.contextName
-	if ctxName == "" {
+	if opts.contextName == "" {
 		return nil, fmt.Errorf("context required")
 	}
 	cmd := &AddCmd{
-		contextName: ctxName,
-		opts:        opts,
+		opts: opts,
 	}
 	return cmd, nil
 }
 
 func (c *AddCmd) Do(ctx context.Context) error {
+	client, err := newGithubClient(ctx, c.opts.baseURL, c.opts.insecureSkipVerify)
+	if err != nil {
+		return err
+	}
+
+	u := fmt.Sprintf(
+		"repos/%v/%v/branches/%v/protection/required_status_checks/contexts",
+		c.opts.owner,
+		c.opts.repo,
+		c.opts.branch,
+	)
+	ctxs := []string{c.opts.contextName}
+	req, err := client.NewRequest("POST", u, ctxs)
+	if err != nil {
+		return err
+	}
+	if _, err = client.Do(ctx, req, nil); err != nil {
+		return err
+	}
 	return nil
 }
 
