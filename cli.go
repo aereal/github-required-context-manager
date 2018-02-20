@@ -16,17 +16,26 @@ type CLIOpts struct {
 	insecureSkipVerify bool
 	baseURL            string
 	list               bool
+	add                bool
+	contextName        string
 }
 
 func dispatchCmd(opts *CLIOpts) (Cmd, error) {
-	if opts.list {
+	if opts.list && opts.add {
+	} else if opts.list {
 		cmd, err := newListCmd(opts)
 		if err != nil {
 			return nil, err
 		}
 		return cmd, nil
+	} else if opts.add {
+		cmd, err := newAddCmd(opts)
+		if err != nil {
+			return nil, err
+		}
+		return cmd, nil
 	}
-	return nil, fmt.Errorf("Either -list given")
+	return nil, fmt.Errorf("Either -list or -add given")
 }
 
 func parseArgs(argv []string) (*CLIOpts, error) {
@@ -38,6 +47,8 @@ func parseArgs(argv []string) (*CLIOpts, error) {
 	flgs.BoolVar(&args.insecureSkipVerify, "insecure-skip-verify", false, "skip verification of cert")
 	flgs.StringVar(&args.baseURL, "base-url", defaultBaseURL, "custom GitHub base URL if you use GitHub Enterprise")
 	flgs.BoolVar(&args.list, "list", false, "list required contexts")
+	flgs.BoolVar(&args.add, "add", false, "add required context")
+	flgs.StringVar(&args.contextName, "context", "", "context name")
 
 	if err := flgs.Parse(argv[1:]); err != nil {
 		return nil, err

@@ -15,14 +15,39 @@ func TestDispatchCmd(t *testing.T) {
 		&testCaseDispatchCmd{
 			opts: &CLIOpts{
 				list: false,
+				add:  false,
 			},
-			expectedError: fmt.Errorf("Either -list given"),
+			expectedError: fmt.Errorf("Either -list or -add given"),
 		},
 		&testCaseDispatchCmd{
 			opts: &CLIOpts{
 				list: true,
+				add:  false,
 			},
 			expectedError: nil,
+		},
+		&testCaseDispatchCmd{
+			opts: &CLIOpts{
+				list:        false,
+				add:         true,
+				contextName: "example-check",
+			},
+			expectedError: nil,
+		},
+		&testCaseDispatchCmd{
+			opts: &CLIOpts{
+				list:        false,
+				add:         true,
+				contextName: "",
+			},
+			expectedError: fmt.Errorf("context required"),
+		},
+		&testCaseDispatchCmd{
+			opts: &CLIOpts{
+				list: true,
+				add:  true,
+			},
+			expectedError: fmt.Errorf("Either -list or -add given"),
 		},
 	}
 	for _, testCase := range testCases {

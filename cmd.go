@@ -9,6 +9,27 @@ type Cmd interface {
 	Do(ctx context.Context) error
 }
 
+type AddCmd struct {
+	opts        *CLIOpts
+	contextName string
+}
+
+func newAddCmd(opts *CLIOpts) (*AddCmd, error) {
+	ctxName := opts.contextName
+	if ctxName == "" {
+		return nil, fmt.Errorf("context required")
+	}
+	cmd := &AddCmd{
+		contextName: ctxName,
+		opts:        opts,
+	}
+	return cmd, nil
+}
+
+func (c *AddCmd) Do(ctx context.Context) error {
+	return nil
+}
+
 type ListCmd struct {
 	opts *CLIOpts
 }
