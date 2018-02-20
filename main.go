@@ -21,5 +21,7 @@ func main() {
 	}
 
 	ctx := context.Background()
-	cmd.Do(ctx)
+	if err = cmd.Do(ctx); err != nil {
+		log.Fatalf("command failed: %s", err)
+	}
 }
