@@ -17,6 +17,7 @@ type CLIOpts struct {
 	baseURL            string
 	list               bool
 	add                bool
+	delete             bool
 	contextName        string
 }
 
@@ -28,9 +29,12 @@ func dispatchCmd(opts *CLIOpts) (Cmd, error) {
 	if opts.add {
 		specified = append(specified, "add")
 	}
+	if opts.delete {
+		specified = append(specified, "delete")
+	}
 
 	if len(specified) != 1 {
-		return nil, fmt.Errorf("Either -list or -add given")
+		return nil, fmt.Errorf("Either -list, -add or -delete given")
 	}
 
 	switch specified[0] {
@@ -46,8 +50,14 @@ func dispatchCmd(opts *CLIOpts) (Cmd, error) {
 			return nil, err
 		}
 		return cmd, nil
+	case "delete":
+		cmd, err := newDeleteCmd(opts)
+		if err != nil {
+			return nil, err
+		}
+		return cmd, nil
 	default:
-		return nil, fmt.Errorf("Either -list or -add given")
+		return nil, fmt.Errorf("Either -list, -add or -delete given")
 	}
 }
 
@@ -61,6 +71,7 @@ func parseArgs(argv []string) (*CLIOpts, error) {
 	flgs.StringVar(&args.baseURL, "base-url", defaultBaseURL, "custom GitHub base URL if you use GitHub Enterprise")
 	flgs.BoolVar(&args.list, "list", false, "list required contexts")
 	flgs.BoolVar(&args.add, "add", false, "add required context")
+	flgs.BoolVar(&args.delete, "delete", false, "delete required context")
 	flgs.StringVar(&args.contextName, "context", "", "context name")
 
 	if err := flgs.Parse(argv[1:]); err != nil {

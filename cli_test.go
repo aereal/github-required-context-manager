@@ -14,15 +14,17 @@ func TestDispatchCmd(t *testing.T) {
 	testCases := []*testCaseDispatchCmd{
 		&testCaseDispatchCmd{
 			opts: &CLIOpts{
-				list: false,
-				add:  false,
+				list:   false,
+				add:    false,
+				delete: false,
 			},
-			expectedError: fmt.Errorf("Either -list or -add given"),
+			expectedError: fmt.Errorf("Either -list, -add or -delete given"),
 		},
 		&testCaseDispatchCmd{
 			opts: &CLIOpts{
-				list: true,
-				add:  false,
+				list:   true,
+				add:    false,
+				delete: false,
 			},
 			expectedError: nil,
 		},
@@ -30,6 +32,7 @@ func TestDispatchCmd(t *testing.T) {
 			opts: &CLIOpts{
 				list:        false,
 				add:         true,
+				delete:      false,
 				contextName: "example-check",
 			},
 			expectedError: nil,
@@ -38,6 +41,16 @@ func TestDispatchCmd(t *testing.T) {
 			opts: &CLIOpts{
 				list:        false,
 				add:         true,
+				delete:      false,
+				contextName: "",
+			},
+			expectedError: fmt.Errorf("context required"),
+		},
+		&testCaseDispatchCmd{
+			opts: &CLIOpts{
+				list:        false,
+				add:         false,
+				delete:      true,
 				contextName: "",
 			},
 			expectedError: fmt.Errorf("context required"),
@@ -47,7 +60,7 @@ func TestDispatchCmd(t *testing.T) {
 				list: true,
 				add:  true,
 			},
-			expectedError: fmt.Errorf("Either -list or -add given"),
+			expectedError: fmt.Errorf("Either -list, -add or -delete given"),
 		},
 	}
 	for _, testCase := range testCases {
