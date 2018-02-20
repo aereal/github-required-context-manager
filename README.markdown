@@ -1,4 +1,4 @@
-# github-required-context-manager
+# github-required-context-manager [![Build Status](https://travis-ci.org/aereal/github-required-context-manager.svg?branch=master)](https://travis-ci.org/aereal/github-required-context-manager)
 
 ## Usage
 
