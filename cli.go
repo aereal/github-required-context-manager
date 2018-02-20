@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 )
 
 const (
@@ -61,7 +62,7 @@ func dispatchCmd(opts *CLIOpts) (Cmd, error) {
 	}
 }
 
-func parseArgs(argv []string) (*CLIOpts, error) {
+func parseArgs(argv []string, out io.Writer) (*CLIOpts, error) {
 	args := &CLIOpts{}
 	flgs := flag.NewFlagSet(argv[0], flag.ContinueOnError)
 	flgs.StringVar(&args.owner, "owner", "", "owner of repo")
@@ -73,6 +74,7 @@ func parseArgs(argv []string) (*CLIOpts, error) {
 	flgs.BoolVar(&args.add, "add", false, "add required context")
 	flgs.BoolVar(&args.delete, "delete", false, "delete required context")
 	flgs.StringVar(&args.contextName, "context", "", "context name")
+	flgs.SetOutput(out)
 
 	if err := flgs.Parse(argv[1:]); err != nil {
 		return nil, err

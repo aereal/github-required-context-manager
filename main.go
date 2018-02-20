@@ -11,7 +11,7 @@ func main() {
 	maxConcurrency := runtime.NumCPU()
 	runtime.GOMAXPROCS(maxConcurrency)
 
-	args, err := parseArgs(os.Args)
+	args, err := parseArgs(os.Args, os.Stdout)
 	if err != nil {
 		log.Fatalf("Error: %s", err)
 	}
